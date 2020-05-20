@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, Suspense, lazy } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Spinner } from "evergreen-ui";
 
-function App() {
+const LoginComponent = lazy(() => import("./pages/auth/login"));
+const LayoutComponent = lazy(() => import("./components/layout"));
+
+interface Props {}
+
+const LoadingComponent = (props: Props) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Fragment>
+      <Fragment>
+        <div
+          style={{
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Spinner />
+        </div>
+      </Fragment>
+    </Fragment>
   );
-}
+};
+
+const App = (props: Props) => {
+  return (
+    <Fragment>
+      <BrowserRouter>
+        <Suspense fallback={LoadingComponent({})}>
+          <Switch>
+            <Route
+              name={"Login"}
+              path={"/login"}
+              exact={true}
+              render={(props: any) => <LoginComponent {...props} />}
+            />
+            <Route
+              path={"/"}
+              render={(props) => <LayoutComponent {...props} />}
+            />
+          </Switch>
+        </Suspense>
+      </BrowserRouter>
+    </Fragment>
+  );
+};
 
 export default App;
