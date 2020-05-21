@@ -1,7 +1,39 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { get } from "../../services/transport";
+import { Spinner, toaster } from "evergreen-ui";
 
 const ConsumnerComponent = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect((): any => {
+    document.title = "Consumers - Inkognito Admin";
+  });
+
+  useState((): any => {
+    (async () => {
+      type Results = {
+        success: string;
+        message: string;
+        payload?: any;
+      };
+      try {
+        setLoading(true);
+        let response: any = await get("/users");
+        let results: Results = response.data;
+        if (!results.success)
+          return toaster.warning("Error", {
+            description: results.message,
+          });
+        setData(results?.payload);
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+        console.log(e?.message);
+      }
+    })();
+  });
   return (
     <Fragment>
       <div className="py-10">
@@ -66,147 +98,101 @@ const ConsumnerComponent = () => {
           </div>
         </header>
         <main>
-          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div className="px-4 py-8 sm:px-0">
-              <div className="flex flex-col">
-                <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                  <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                    <table className="min-w-full">
-                      <thead>
-                        <tr>
-                          <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                            Name
-                          </th>
-                          <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                            Title
-                          </th>
-                          <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                            Email
-                          </th>
-                          <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                            Role
-                          </th>
-                          <th className="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="bg-white">
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                            Bernard Lane
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Director, Human Resources
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            bernardlane@example.com
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Owner
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </a>
-                          </td>
-                        </tr>
-                        <tr className="bg-gray-50">
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                            Bernard Lane
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Director, Human Resources
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            bernardlane@example.com
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Owner
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </a>
-                          </td>
-                        </tr>
-                        <tr className="bg-white">
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                            Bernard Lane
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Director, Human Resources
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            bernardlane@example.com
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Owner
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </a>
-                          </td>
-                        </tr>
-                        <tr className="bg-gray-50">
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                            Bernard Lane
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Director, Human Resources
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            bernardlane@example.com
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Owner
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </a>
-                          </td>
-                        </tr>
-                        <tr className="bg-white">
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                            Bernard Lane
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Director, Human Resources
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            bernardlane@example.com
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            Owner
-                          </td>
-                          <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+          {loading ? (
+            <Fragment>
+              <div
+                style={{
+                  height: "50vh",
+                  width: "100vw",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Spinner />
               </div>
-            </div>
-          </div>
+            </Fragment>
+          ) : (
+            <Fragment>
+              { data.length === 0 ? (
+                <Fragment>
+                  <div
+                    style={{
+                      height: "50vh",
+                      width: "100vw",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    No users registered...
+                  </div>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="px-4 py-8 sm:px-0">
+                      <div className="flex flex-col">
+                        <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                          <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                            <table className="min-w-full">
+                              <thead>
+                                <tr>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Name
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Title
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Email
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Role
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              {
+                                data.map((consumer, i) => (
+                                    <Fragment key={i}>
+                                      <tr className={`${i % 2 === 0 ? "bg-gray-50" :"bg-white"}`}>
+                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                                          Bernard Lane
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                          Director, Human Resources
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                          bernardlane@example.com
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                          Owner
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                                          <a
+                                              href="#"
+                                              className="text-indigo-600 hover:text-indigo-900"
+                                          >
+                                            Edit
+                                          </a>
+                                        </td>
+                                      </tr>
+                                    </Fragment>
+                                ))
+                              }
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Fragment>
+              )}
+            </Fragment>
+          )}
         </main>
       </div>
     </Fragment>

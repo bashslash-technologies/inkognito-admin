@@ -2,19 +2,19 @@ import axios from "axios";
 import { toaster } from "evergreen-ui";
 import { BASE_URL } from "./index";
 
-axios.defaults.baseURL = `${BASE_URL}/api/v1`; //
+axios.defaults.baseURL = BASE_URL; //
 
 const config = {
   headers: {},
 };
 
-function notifyError(msg: string) {
+function notifyError(msg: string): void {
   toaster.danger("Error", {
     description: msg,
   });
 }
 
-const errorhandler = (error: any) => {
+const errorhandler = (error: any): any => {
   if (error.message === "Network Error") {
     notifyError("Network connection lost. Connect and try again");
     return;
@@ -29,7 +29,6 @@ const successHandler = (response: any) => {
 const setToken = (config?: any) => {
   config.headers["Access-Control-Allow-Origin"] = "*";
   config.headers["Accept"] = "application/json";
-  console.log(config);
   return config;
 };
 
