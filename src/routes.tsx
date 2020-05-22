@@ -5,6 +5,7 @@ const ConsumerComponent = lazy(() => import("./pages/Consumer"));
 const ManageCouriers = lazy(() => import("./pages/Couriers"));
 const ManageVendors = lazy(() => import("./pages/Vendors"));
 const ManageSingleVendors = lazy(() => import("./pages/Vendors/single"));
+const CategoriesComponent = lazy(() => import("./pages/Category"));
 
 export default [
   { path: "/", exact: true, component: DashboardComponent },
@@ -12,4 +13,5 @@ export default [
   { path: "/couriers", exact: true, component: ManageCouriers },
   { path: "/vendors", exact: true, component: ManageVendors },
   { path: "/vendors/:id", exact: true, component: ManageSingleVendors },
+  { path: "/categories", exact: true, component: CategoriesComponent },
 ];
