@@ -1,10 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import moment from 'moment'
+import moment from "moment";
+import { post } from "../../services/transport";
+import { Spinner, toaster } from "evergreen-ui";
 
 const SingleVendor = () => {
   const { location, push } = useHistory();
   const [vendor, setVendor]: any = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.title = " Single Vendor - Inkognito vendor";
@@ -15,6 +18,66 @@ const SingleVendor = () => {
     let data: any = location.state;
     setVendor(data.data);
   }, [location]);
+
+  const VerifyLicense = async () => {
+    try {
+      type Results = {
+        success: string;
+        message: string;
+        payload?: any;
+      };
+      setLoading(true);
+      let response: any = await post("/users/licence", {
+        user_id: vendor?._id,
+      });
+      let results: Results = response.data;
+      if (!results.success) {
+        setLoading(false);
+        return toaster.warning("Error", {
+          description: results.message,
+        });
+      }
+      console.log(results?.payload);
+      setVendor(results?.payload);
+      setLoading(false);
+      return toaster.warning("Error", {
+        description: results.message,
+      });
+    } catch (e) {
+      setLoading(false);
+      return new Error(e);
+    }
+  };
+
+  const VerifyIdentification = async () => {
+    try {
+      type Results = {
+        success: string;
+        message: string;
+        payload?: any;
+      };
+      setLoading(true);
+      let response: any = await post("/users/identification", {
+        user_id: vendor?._id,
+      });
+      let results: Results = response.data;
+      if (!results.success) {
+        setLoading(false);
+        return toaster.warning("Error", {
+          description: results.message,
+        });
+      }
+      console.log(results?.payload);
+      setVendor(results?.payload);
+      setLoading(false);
+      return toaster.warning("Error", {
+        description: results.message,
+      });
+    } catch (e) {
+      setLoading(false);
+      return new Error(e);
+    }
+  };
 
   return (
     <Fragment>
@@ -75,23 +138,33 @@ const SingleVendor = () => {
                   </h2>
                 </div>
                 <div className="mt-4 flex-shrink-0 flex md:mt-0 md:ml-4">
-                  <span className="inline-flex rounded-md shadow-sm">
-                    <button
-                      type="button"
-                      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:bg-purple-500 hover:text-white focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-50 active:text-gray-800"
-                    >
-                      <span>Approve License</span>
-                    </button>
-                  </span>
-
-                  <span className="ml-3 inline-flex rounded-md shadow-sm">
-                    <button
-                      type="button"
-                      className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white  hover:bg-purple-500 hover:text-white focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-50 active:text-gray-800"
-                    >
-                      <span>Approve Certificate</span>
-                    </button>
-                  </span>
+                  {loading && (
+                    <div className={"mt-2 mr-2"}>
+                      <Spinner size={25} />
+                    </div>
+                  )}
+                  {vendor?.documents?.licence?.verified === false && (
+                    <span className="inline-flex rounded-md shadow-sm">
+                      <button
+                        onClick={VerifyLicense}
+                        type="button"
+                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:bg-purple-500 hover:text-white focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-50 active:text-gray-800"
+                      >
+                        <span>Approve License</span>
+                      </button>
+                    </span>
+                  )}
+                  {vendor?.documents?.identification?.verified === false && (
+                    <span className="ml-3 inline-flex rounded-md shadow-sm">
+                      <button
+                        onClick={VerifyIdentification}
+                        type="button"
+                        className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white  hover:bg-purple-500 hover:text-white focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-50 active:text-gray-800"
+                      >
+                        <span>Approve Certificate</span>
+                      </button>
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -133,7 +206,8 @@ const SingleVendor = () => {
                     <dd className="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
                       {vendor?.email || "Not Specified"}
                     </dd>
-                  </div><div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  </div>
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt className="text-sm leading-5 font-medium text-gray-500">
                       Contact
                     </dt>
