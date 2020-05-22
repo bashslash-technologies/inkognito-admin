@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toaster } from "evergreen-ui";
 import { BASE_URL } from "./index";
+import Auth from "../services/index";
 
 axios.defaults.baseURL = BASE_URL; //
 
@@ -27,6 +28,11 @@ const successHandler = (response: any) => {
 };
 
 const setToken = (config?: any) => {
+  let token = Auth.getCipher();
+  if (token) {
+    token = JSON.parse(token).token;
+    config.headers.authorization = `Bearer ${token}`;
+  }
   config.headers["Access-Control-Allow-Origin"] = "*";
   config.headers["Accept"] = "application/json";
   return config;
@@ -70,6 +76,13 @@ export const delete_request = (route: string) =>
   new Promise((resolve, reject) => {
     axios
       .delete(route)
+      .then((res) => resolve(res))
+      .catch((err) => reject(err));
+  });
+export const all = (route: string[]) =>
+  new Promise((resolve, reject) => {
+    axios
+      .all([route])
       .then((res) => resolve(res))
       .catch((err) => reject(err));
   });

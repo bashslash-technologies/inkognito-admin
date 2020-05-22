@@ -1,7 +1,23 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { get } from "../../services/transport";
 
 const DashboardComponent = () => {
+  const [loading, setLoading] = useState(false);
+  const [vendors, setVendors]: any = useState(null);
+  useEffect(() => {
+    document.title = "Welcome - Inkognito";
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    get("/users?role=vendor")
+      .then(({ data }: any) => {
+        setLoading(true);
+        setVendors(data.payload);
+      })
+      .catch((e) => console.log(e));
+  }, []);
   return (
     <Fragment>
       <div className="py-10">
@@ -79,21 +95,6 @@ const DashboardComponent = () => {
                             <div className="text-2xl leading-8 font-semibold text-gray-900">
                               71,897
                             </div>
-                            <div className="ml-2 flex items-baseline text-sm leading-5 font-semibold text-green-600">
-                              <svg
-                                className="self-center flex-shrink-0 h-5 w-5 text-green-500"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                              <span className="sr-only">Increased by</span>
-                              122
-                            </div>
                           </dd>
                         </dl>
                       </div>
@@ -131,27 +132,13 @@ const DashboardComponent = () => {
                       <div className="ml-5 w-0 flex-1">
                         <dl>
                           <dt className="text-sm leading-5 font-medium text-gray-500 truncate">
-                            Total Vendors
+                            Total Vendor(s)
                           </dt>
                           <dd className="flex items-baseline">
                             <div className="text-2xl leading-8 font-semibold text-gray-900">
-                              58
+                              {vendors?.length || 'N/A'}
                             </div>
-                            <div className="ml-2 flex items-baseline text-sm leading-5 font-semibold text-green-600">
-                              <svg
-                                className="self-center flex-shrink-0 h-5 w-5 text-green-500"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                              <span className="sr-only">Increased by</span>
-                              5.4%
-                            </div>
+
                           </dd>
                         </dl>
                       </div>
@@ -189,26 +176,11 @@ const DashboardComponent = () => {
                       <div className="ml-5 w-0 flex-1">
                         <dl>
                           <dt className="text-sm leading-5 font-medium text-gray-500 truncate">
-                            Total Couriers
+                            Total Courier(s)
                           </dt>
                           <dd className="flex items-baseline">
                             <div className="text-2xl leading-8 font-semibold text-gray-900">
                               24
-                            </div>
-                            <div className="ml-2 flex items-baseline text-sm leading-5 font-semibold text-green-600">
-                              <svg
-                                  className="self-center flex-shrink-0 h-5 w-5 text-green-500"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                              >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"
-                                />
-                              </svg>
-                              <span className="sr-only">Increased by</span>
-                              5.4%
                             </div>
                           </dd>
                         </dl>

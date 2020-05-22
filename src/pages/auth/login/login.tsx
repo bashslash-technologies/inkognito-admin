@@ -46,7 +46,8 @@ const LoginComponent = (props: Props) => {
             push("/");
             setLoading(true);
         } catch (e) {
-            setLoading(true);
+            console.log(e)
+            setLoading(false);
             toaster.warning("Error", {
                 description: e.response?.data.message,
             });
