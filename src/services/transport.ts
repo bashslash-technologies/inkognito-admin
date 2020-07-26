@@ -34,6 +34,7 @@ const setToken = (config?: any) => {
     config.headers.authorization = `Bearer ${token}`;
   }
   config.headers["Access-Control-Allow-Origin"] = "*";
+  config.headers["Content-Type"] = "application/json";
   config.headers["Accept"] = "application/json";
   return config;
 };

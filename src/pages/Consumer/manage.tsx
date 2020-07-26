@@ -20,13 +20,13 @@ const ConsumnerComponent = () => {
       };
       try {
         setLoading(true);
-        let response: any = await get("/users");
+        let response: any = await get("/users?role=CLIENT");
         let results: Results = response.data;
         if (!results.success)
           return toaster.warning("Error", {
             description: results.message,
           });
-        setData(results?.payload);
+        setData(results.payload?.users);
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -114,7 +114,7 @@ const ConsumnerComponent = () => {
             </Fragment>
           ) : (
             <Fragment>
-              { data.length === 0 ? (
+              {data.length === 0 ? (
                 <Fragment>
                   <div
                     style={{
@@ -154,34 +154,36 @@ const ConsumnerComponent = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                              {
-                                data.map((consumer, i) => (
-                                    <Fragment key={i}>
-                                      <tr className={`${i % 2 === 0 ? "bg-gray-50" :"bg-white"}`}>
-                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                                          Bernard Lane
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                          Director, Human Resources
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                          bernardlane@example.com
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                          Owner
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                                          <a
-                                              href="#"
-                                              className="text-indigo-600 hover:text-indigo-900"
-                                          >
-                                            Edit
-                                          </a>
-                                        </td>
-                                      </tr>
-                                    </Fragment>
-                                ))
-                              }
+                                {data.map((consumer, i) => (
+                                  <Fragment key={i}>
+                                    <tr
+                                      className={`${
+                                        i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                      }`}
+                                    >
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                                        Bernard Lane
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        Director, Human Resources
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        bernardlane@example.com
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        Owner
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                                        <a
+                                          href="#"
+                                          className="text-indigo-600 hover:text-indigo-900"
+                                        >
+                                          Edit
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  </Fragment>
+                                ))}
                               </tbody>
                             </table>
                           </div>

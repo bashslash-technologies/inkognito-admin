@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { get } from "../../services/transport";
-import {Spinner, toaster} from "evergreen-ui";
+import { Spinner, toaster } from "evergreen-ui";
 
 const ManageCouriers = () => {
   const [data, setData] = useState([]);
@@ -20,13 +20,13 @@ const ManageCouriers = () => {
       };
       try {
         setLoading(true);
-        let response: any = await get("/users?role=delivery");
+        let response: any = await get("/users?role=COURIER");
         let results: Results = response.data;
         if (!results.success)
           return toaster.warning("Error", {
             description: results.message,
           });
-        setData(results?.payload);
+        setData(results.payload?.users);
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -99,8 +99,24 @@ const ManageCouriers = () => {
         </header>
         <main>
           {loading ? (
-              <Fragment>
-                <div
+            <Fragment>
+              <div
+                style={{
+                  height: "50vh",
+                  width: "100vw",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Spinner />
+              </div>
+            </Fragment>
+          ) : (
+            <Fragment>
+              {data.length === 0 ? (
+                <Fragment>
+                  <div
                     style={{
                       height: "50vh",
                       width: "100vw",
@@ -108,93 +124,78 @@ const ManageCouriers = () => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                >
-                  <Spinner />
-                </div>
-              </Fragment>
-          ) : (
-              <Fragment>
-                { data.length === 0 ? (
-                    <Fragment>
-                      <div
-                          style={{
-                            height: "50vh",
-                            width: "100vw",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                      >
-                        No couriers registered...
-                      </div>
-                    </Fragment>
-                ) : (
-                    <Fragment>
-                      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div className="px-4 py-8 sm:px-0">
-                          <div className="flex flex-col">
-                            <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                              <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                                <table className="min-w-full">
-                                  <thead>
-                                  <tr>
-                                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                      Name
-                                    </th>
-                                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                      Title
-                                    </th>
-                                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                      Email
-                                    </th>
-                                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                      Role
-                                    </th>
-                                    <th className="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>
-                                  {
-                                    data.map((consumer, i) => (
-                                        <Fragment key={i}>
-                                          <tr className={`${i % 2 === 0 ? "bg-gray-50" :"bg-white"}`}>
-                                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
-                                              Bernard Lane
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                              Director, Human Resources
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                              bernardlane@example.com
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                                              Owner
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                                              <a
-                                                  href="#"
-                                                  className="text-indigo-600 hover:text-indigo-900"
-                                              >
-                                                Edit
-                                              </a>
-                                            </td>
-                                          </tr>
-                                        </Fragment>
-                                    ))
-                                  }
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
+                  >
+                    No couriers registered...
+                  </div>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="px-4 py-8 sm:px-0">
+                      <div className="flex flex-col">
+                        <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                          <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+                            <table className="min-w-full">
+                              <thead>
+                                <tr>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Name
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Title
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Email
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Role
+                                  </th>
+                                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {data.map((consumer, i) => (
+                                  <Fragment key={i}>
+                                    <tr
+                                      className={`${
+                                        i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                      }`}
+                                    >
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900">
+                                        Bernard Lane
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        Director, Human Resources
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        bernardlane@example.com
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
+                                        Owner
+                                      </td>
+                                      <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                                        <a
+                                          href="#"
+                                          className="text-indigo-600 hover:text-indigo-900"
+                                        >
+                                          Edit
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  </Fragment>
+                                ))}
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       </div>
-                    </Fragment>
-                )}
-              </Fragment>
+                    </div>
+                  </div>
+                </Fragment>
+              )}
+            </Fragment>
           )}
         </main>
-
       </div>
     </Fragment>
   );

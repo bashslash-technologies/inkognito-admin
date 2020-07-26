@@ -37,10 +37,9 @@ const SingleVendor = () => {
           description: results.message,
         });
       }
-      console.log(results?.payload);
       setVendor(results?.payload);
       setLoading(false);
-      return toaster.warning("Error", {
+      return toaster.success("Hurray", {
         description: results.message,
       });
     } catch (e) {
@@ -70,7 +69,7 @@ const SingleVendor = () => {
       console.log(results?.payload);
       setVendor(results?.payload);
       setLoading(false);
-      return toaster.warning("Error", {
+      return toaster.success("Hurray", {
         description: results.message,
       });
     } catch (e) {

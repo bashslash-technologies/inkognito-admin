@@ -29,13 +29,14 @@ const CategoryComponent = () => {
           payload?: any;
         };
         let results: Results = data?.data;
+
         if (!results.success) {
           toaster.warning("Error", {
             description: results.message,
           });
           return setLoading(false);
         }
-        setCategories(results.payload);
+        setCategories(results.payload?.categories);
         setLoading(false);
       })
       .catch((e) => {
@@ -55,14 +56,16 @@ const CategoryComponent = () => {
           message: string;
           payload?: any;
         };
+
         let results: Results = data?.data;
+
         if (!results.success) {
           toaster.warning("Error", {
             description: results.message,
           });
           return setLoading(false);
         }
-        setCategories([...categories, results.payload]);
+        setCategories([...categories, results.payload?.category]);
         setLoading(false);
         toaster.success("Hurray", {
           description: results.message,
@@ -199,7 +202,9 @@ const CategoryComponent = () => {
                                 {cat.name}
                               </h3>
                               <p className="mt-3 text-base leading-6 text-gray-500">
-                                {cat.description.length > 50 ? `${cat.description.slice(0,50)}...` : cat.description}
+                                {cat.description.length > 50
+                                  ? `${cat.description.slice(0, 50)}...`
+                                  : cat.description}
                               </p>
                             </a>
                           </div>

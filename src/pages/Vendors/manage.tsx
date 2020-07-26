@@ -20,13 +20,13 @@ const ManageVendors = () => {
       };
       try {
         setLoading(true);
-        let response: any = await get("/users?role=vendor");
+        let response: any = await get("/users?role=VENDOR");
         let results: Results = response.data;
         if (!results.success)
           return toaster.warning("Error", {
             description: results.message,
           });
-        setData(results?.payload);
+        setData(results.payload?.users);
         setLoading(false);
       } catch (e) {
         setLoading(false);

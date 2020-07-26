@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
-export const BASE_URL = "https://inkognito.herokuapp.com/api/v1";
-// export const BASE_URL = "http://localhost:5000/api/v1";
+// export const BASE_URL = "http://inkognito.herokuapp.com/api/v1";
+export const BASE_URL = "http://localhost:5002/api/v1";
 
 class Auth {
   getCipher(): any {
